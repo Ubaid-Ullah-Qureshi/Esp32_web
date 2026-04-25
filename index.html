@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ESP32 BLE Audio Monitor</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header>
+        <h1>STM32 → ESP32 BLE Audio</h1>
+        <p>Connect to ESP32 notifications, play audio live, and plot waveform in real-time.</p>
+      </header>
+
+      <section class="card controls">
+        <div class="control-grid">
+          <label>
+            Service UUID
+            <input id="serviceUuid" type="text" value="4fafc201-1fb5-459e-8fcc-c5c9c331914b" />
+          </label>
+          <label>
+            Characteristic UUID
+            <input id="charUuid" type="text" value="beb5483e-36e1-4688-b7f5-ea07361b26a8" />
+          </label>
+          <label>
+            Sample Rate (Hz)
+            <input id="sampleRate" type="number" min="1000" max="96000" value="8000" />
+          </label>
+          <label>
+            STM32 Offset
+            <input id="offset" type="number" value="2047" />
+          </label>
+          <label>
+            Gain
+            <input id="gain" type="number" step="0.1" value="1.0" />
+          </label>
+        </div>
+
+        <div class="actions">
+          <button id="connectBtn">Connect BLE</button>
+          <button id="disconnectBtn" disabled>Disconnect</button>
+          <button id="muteBtn">Mute</button>
+        </div>
+
+        <div class="status-row">
+          <span id="status" class="badge neutral">Disconnected</span>
+          <span id="stats">Packets: 0 · Samples: 0 · Queue: 0</span>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Live Waveform</h2>
+        <canvas id="waveCanvas" width="1200" height="320" aria-label="live waveform plot"></canvas>
+      </section>
+
+      <section class="card hint">
+        <h2>Data format expected</h2>
+        <ul>
+          <li>BLE notifications as raw <code>int16</code> little-endian samples.</li>
+          <li>Your STM32 data appears to be unsigned-offset around 2047; this app recenters it.</li>
+          <li>For smoother audio use BLE MTU tuning and a stable packet interval on ESP32.</li>
+        </ul>
+      </section>
+    </main>
+
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
